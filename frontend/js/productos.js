@@ -119,7 +119,16 @@ createApp({
   created() {
     this.fetchData(this.url);
     
-    //this.productosCotizados = JSON.parse(sessionStorage.getItem('cotizados'));
+    // Recuperar los datos de la sesión almacenados en sessionStorage
+    let cotizados = sessionStorage.getItem('cotizados');
+    // Verificar si los datos almacenados son un arreglo válido
+    if (cotizados && Array.isArray(JSON.parse(cotizados))) {
+      // Si son un arreglo válido, asignarlos a la variable productosCotizados
+      this.productosCotizados = JSON.parse(cotizados);
+    } else {
+      // Si no son un arreglo válido, inicializar la variable productosCotizados como una lista vacía
+      this.productosCotizados = [];
+    }
     
     var elVue = this;
     
