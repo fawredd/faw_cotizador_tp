@@ -118,7 +118,9 @@ createApp({
   },
   created() {
     this.fetchData(this.url);
-    this.productosCotizados = JSON.parse(sessionStorage.getItem('cotizados'));
+    
+    //this.productosCotizados = JSON.parse(sessionStorage.getItem('cotizados'));
+    
     var elVue = this;
     
     document.getElementById("formularioBusqueda").addEventListener("submit", function (event) {
@@ -165,7 +167,7 @@ createApp({
       return this.productosCotizados.reduce((sum, producto) => sum + producto.precio, 0);
     },
     textoBoton() {
-      var devolver = "";
+      var devolver = "-";
       if(this.tablaActual==1){
         devolver = `Mostrar cotización. Items agregados (${this.productosCotizados.length})`;
       } else {
