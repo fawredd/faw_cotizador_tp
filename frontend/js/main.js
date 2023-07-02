@@ -16,13 +16,12 @@ document.getElementById("header").innerHTML = `
               <a class="nav-link active" href="productos.html" aria-current="page">Home <span class="visually-hidden">(current)</span></a>
           </li>
           <li class="nav-item">
-              <a class="nav-link" href="#">Link</a>
+              <a class="nav-link" href="#" id="menuCotiza">Cotización</a>
           </li>
           <li class="nav-item dropdown">
               <a class="nav-link dropdown-toggle" href="#" id="dropdownId" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">CRUD</a>
               <div class="dropdown-menu" aria-labelledby="dropdownId">
-                  <a class="dropdown-item" href="productos.html">Produtos</a>
-                  <a class="dropdown-item" href="#">Action 2</a>
+                  <a class="dropdown-item" href="producto-create.html">Nuevo produto</a>
               </div>
           </li>
       </ul>

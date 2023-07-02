@@ -89,14 +89,21 @@ createApp({
       if (this.tablaActual==1){
         this.tablaActual = 2;
         this.titulo = "Acumulado";
+        document.getElementById("elBoton").classList.toggle("btn-primary");
+        document.getElementById("elBoton").classList.toggle("btn-success");
+        this.tituloTabla = "Productos cotizados";
       }else{
         this.tablaActual = 1;
         this.titulo = "Stock";
+        document.getElementById("elBoton").classList.toggle("btn-primary");
+        document.getElementById("elBoton").classList.toggle("btn-success");
+        this.tituloTabla = "Productos";
       }
     },
     // Agrega un producto a la lista de cotizados
     agregarACotizacion(producto) {
       this.productosCotizados.push(producto);
+      sessionStorage.setItem('cotizados',JSON.stringify(this.productosCotizados));
     },
     // Elimina un producto a la lista de cotizados mediante su ID
     eliminarDeCotizacion(productoId) {
@@ -111,6 +118,7 @@ createApp({
   },
   created() {
     this.fetchData(this.url);
+    this.productosCotizados = JSON.parse(sessionStorage.getItem('cotizados'));
     var elVue = this;
     
     document.getElementById("formularioBusqueda").addEventListener("submit", function (event) {
@@ -145,7 +153,12 @@ createApp({
 
       }
     });
-    
+
+    document.getElementById("menuCotiza").addEventListener("click", function (event) {
+      // Evitar que el formulario se envíe de forma predeterminada
+      event.preventDefault();
+      elVue.mostrarCotizacion();
+    });
   },
   computed: {
     sumaTotal() {
