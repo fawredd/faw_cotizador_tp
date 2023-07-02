@@ -1,0 +1,74 @@
+/* Estilos generales */
+*{
+    font-family: 'Nunito', serif;
+
+  }
+  
+/* ------ Header ---------------- */
+header {
+    position: sticky;
+    top: 0;
+    left:0;
+    width: 100%;
+    /* text-shadow: 4px 4px 8px grey; */
+    padding-left: 5rem;
+    padding-right: 5rem;
+    padding-top:1rem;
+    /* background: rgba(128, 128, 128, 0.5); */
+    border-width: 5px;
+    background-color:#154455;
+    padding: 20px;
+    text-align: center;
+    color:white;
+    margin-bottom: 1rem;
+    z-index:4;
+}
+
+.sticky {
+    position: sticky;
+    top: 0;
+    left:0;
+    width: 100%;
+    transition: 0.7s;
+    z-index:4;
+  }
+
+  a {
+    margin-left:0.5rem;
+    margin-right:0.5rem;
+  }
+
+  .btn-animate {
+    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+}
+
+.btn-animate:hover {
+    transform: scale(1.1);
+    /* Aumenta el tamaño del botón */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+    /* Agrega una sombra */
+}
+
+  /* Footer */
+  footer {
+    border-width: 5px;
+    background-color:#154455;
+    padding: 20px;
+    text-align: center;
+    color:white;
+  }
+
+  /* CSS */
+  .oculto {
+    display: none !important;
+  }
+
+  @media (max-width: 400px) {
+    /* Estilos para celulares */
+  }
+  @media (max-width: 600px) {
+    /* Estilos para tablets y celulares */
+  }
+  @media (max-width: 768px) {
+    /* Estilos para tablets */
+  }

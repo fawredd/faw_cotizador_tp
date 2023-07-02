@@ -47,7 +47,7 @@ ma = Marshmallow(app): Se crea un objeto ma de la clase Marshmallow, que se util
 # Configura la URI de la base de datos con el driver de MySQL, usuario, contraseña y nombre de la base de datos
 # URI de la BD == Driver de la BD://user:password@UrlBD/nombreBD
 # app.config["SQLALCHEMY_DATABASE_URI"] = "mysql+pymysql://root:root@localhost/proyecto"
-app.config["SQLALCHEMY_DATABASE_URI"] = "mysql+pymysql://root:-Clave1@localhost/proyecto"
+app.config["SQLALCHEMY_DATABASE_URI"] = "mysql+pymysql://fawredd:-23001Clave@fawredd.mysql.pythonanywhere-services.com/fawredd$proyecto"
 # Configura el seguimiento de modificaciones de SQLAlchemy a False para mejorar el rendimiento
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 # Crea una instancia de la clase SQLAlchemy y la asigna al objeto db para interactuar con la base de datos
@@ -127,6 +127,9 @@ Endpoints de la API de gestión de productos:
 get_producto(id):
     # Obtiene un producto específico de la base de datos
     # Retorna un JSON con la información del producto correspondiente al ID proporcionado
+busca_producto(texto):
+    # Busca un producto que contenga en el campo nombre el texto buscado.
+    # Retorna un JSON con la información de los productos correspondientes.
 delete_producto(id):
     # Elimina un producto de la base de datos
     # Retorna un JSON con el registro eliminado del producto correspondiente al ID proporcionado
@@ -140,7 +143,7 @@ update_producto(id):
     # Retorna un JSON con el producto actualizado
 
 '''
-@app.route("/productos/<id>", methods=["GET"])
+@app.route("/productos/<int:id>", methods=["GET"])
 def get_producto(id):
     """
     Endpoint para obtener un producto específico de la base de datos.
@@ -149,6 +152,19 @@ def get_producto(id):
     """
     producto = Producto.query.get(id)  # Obtiene el producto correspondiente al ID recibido
     return producto_schema.jsonify(producto)  # Retorna el JSON del producto
+
+@app.route("/productos/find/<string:texto>", methods=["GET"])
+def busca_producto(texto):
+    """
+    Endpoint para buscar productos en la base de datos.
+
+    Retorna un JSON con la información de los productos correspondientes.
+    """
+    texto_min = texto.lower()  # Convertir la cadena de búsqueda a minúscula
+    #all_productos = Producto.query.all()  # Pruebo que la ruta funcione.
+    all_productos = Producto.query.filter(Producto.nombre.ilike(f'%{texto_min}%')).all()  # Filtra los productos
+    result = productos_schema.dump(all_productos)  # Serializa los registros en formato JSON
+    return jsonify(result)  # Retorna el JSON de todos los registros de la tabla
 
 @app.route("/productos/<id>", methods=["DELETE"])
 def delete_producto(id):
@@ -206,4 +222,3 @@ Este código es el programa principal de la aplicación Flask. Se verifica si el
 if __name__ == "__main__":
     # Ejecuta el servidor Flask en el puerto 5000 en modo de depuración
     app.run(debug=True, port=5000)
-    

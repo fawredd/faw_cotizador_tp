@@ -17,13 +17,18 @@ createApp({
       imagen: "",
       stock: 0,
       precio: 0,
-    };
+      // Productos cotizados
+      productosCotizados: [],
+      // Componente actual
+      tablaActual: 1,
+      titulo: "Stock",
+      tituloTabla: "Productos"
+      };
   },
   methods: {
     fetchData(url) {
       /**El método fetchData realiza una solicitud HTTP utilizando la función fetch a la URL especificada. Luego, los datos de respuesta se convierten en formato JSON y se asignan al arreglo productos. Además, se actualiza la variable cargando para indicar que la carga de productos ha finalizado. En caso de producirse un error, se muestra en la consola y se establece la variable error en true.
-       *
-       */
+      **/
       fetch(url)
         .then((response) => response.json()) // Convierte la respuesta en formato JSON
         .then((data) => {
@@ -80,8 +85,80 @@ createApp({
           alert("Error al Grabar.");
         });
     },
+    mostrarCotizacion() {
+      if (this.tablaActual==1){
+        this.tablaActual = 2;
+        this.titulo = "Acumulado";
+      }else{
+        this.tablaActual = 1;
+        this.titulo = "Stock";
+      }
+    },
+    // Agrega un producto a la lista de cotizados
+    agregarACotizacion(producto) {
+      this.productosCotizados.push(producto);
+    },
+    // Elimina un producto a la lista de cotizados mediante su ID
+    eliminarDeCotizacion(productoId) {
+        // Busca el índice del producto con el ID correspondiente en la lista
+        const index = this.productosCotizados.findIndex(producto => producto.id === productoId);
+        // Si se encontró el producto, elimínalo de la lista
+        if (index !== -1) {
+          this.productosCotizados.splice(index, 1);
+          console.log("Se elimino el producto" + producto + " en pos " + index)
+        }
+    }
   },
   created() {
     this.fetchData(this.url);
+    var elVue = this;
+    
+    document.getElementById("formularioBusqueda").addEventListener("submit", function (event) {
+      // Evitar que el formulario se envíe de forma predeterminada
+      event.preventDefault();
+    
+      // Obtener el valor del campo de búsqueda
+      var textoBuscado = document.getElementsByName("textoBuscado")[0].value;
+      if(textoBuscado!=""){
+      
+        elVue.cargando = true;
+      
+        // Realizar una solicitud fetch para enviar los datos del formulario a la ruta Flask
+        fetch("https://fawredd.pythonanywhere.com/productos/find/" + textoBuscado )
+          .then(function (response) {
+            return response.json();
+          })
+          .then(function (data) {
+            // Mostrar los productos que coinciden con el término de búsqueda
+            elVue.productos = data;
+            elVue.cargando = false;
+            elVue.tituloTabla = "Productos filtrados cuyo nombre contienen el texto " + textoBuscado;
+          })
+          .catch((err) => {
+            console.error(err);
+            elVue.error = true;
+            alert("Error al buscar productos.");
+          });
+      } else {
+        elVue.tituloTabla = "Productos"
+        elVue.fetchData(elVue.url);
+
+      }
+    });
+    
   },
+  computed: {
+    sumaTotal() {
+      return this.productosCotizados.reduce((sum, producto) => sum + producto.precio, 0);
+    },
+    textoBoton() {
+      var devolver = "";
+      if(this.tablaActual==1){
+        devolver = `Mostrar cotización. Items agregados (${this.productosCotizados.length})`;
+      } else {
+        devolver = `Mostrar productos. Items cotizados (${this.productosCotizados.length})`;
+      }
+      return devolver;
+    }
+  }
 }).mount("#app");
